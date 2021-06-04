@@ -3,13 +3,13 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { TicketsProvider } from "./components/TickersContext";
+import { TickersProvider } from "./components/TickersContext";
 
 ReactDOM.render(
   <React.StrictMode>
-    <TicketsProvider>
+    <TickersProvider>
       <App />
-    </TicketsProvider>
+    </TickersProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

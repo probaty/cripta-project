@@ -1,21 +1,21 @@
 import React, { createContext, useState } from "react";
 
-export const TicketsContext = createContext({});
+export const TickersContext = createContext({});
 
-export const TicketsProvider = ({ children }) => {
-  const [tickets, setTickets] = useState([]);
+export const TickersProvider = ({ children }) => {
+  const [tickers, setTickets] = useState([]);
 
   const addTicker = (ticket) => {
-    setTickets([...tickets, ticket]);
+    setTickets([...tickers, ticket]);
   };
 
   const removeTicker = (ticket) => {
-    setTickets(tickets.filter((t) => t.name !== ticket.name));
+    setTickets(tickers.filter((t) => t.name !== ticket.name));
   };
 
   return (
-    <TicketsContext.Provider value={{ tickets, addTicker, removeTicker }}>
+    <TickersContext.Provider value={{ tickers, addTicker, removeTicker }}>
       {children}
-    </TicketsContext.Provider>
+    </TickersContext.Provider>
   );
 };

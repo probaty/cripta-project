@@ -1,4 +1,5 @@
 import axios from "axios";
+const tickerList = new Map();
 
 const API_KEY =
   "540628cf3b241bd01b2c534f8a2475c423767d4058542432e4688401614b4d58";

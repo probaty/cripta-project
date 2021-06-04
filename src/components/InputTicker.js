@@ -1,6 +1,7 @@
-import { fetchCoinList } from "./../../api";
+import { fetchCoinList } from "../api";
 import React, { Component, useState } from "react";
-import "./InputTicker.css";
+import { TickersContext } from "./TickersContext";
+import LoadingIcon from "./LoadingIcon/LoadingIcon";
 
 export default class InputTicker extends Component {
   constructor(props) {
@@ -10,6 +11,8 @@ export default class InputTicker extends Component {
       coins: [],
       isLoading: true,
       inputValue: "",
+      tickerOver: false,
+      tickerNotExists: false,
     };
   }
 
@@ -24,41 +27,79 @@ export default class InputTicker extends Component {
     });
   }
 
+  addTicker = () => {
+    if (this.state.inputValue) {
+      const currentTicker = {
+        name: this.state.inputValue.toUpperCase(),
+        price: "-",
+      };
+      if (this.checkTicker(currentTicker.name)) {
+        this.context.addTicker(currentTicker);
+        this.setState({
+          inputValue: "",
+        });
+      }
+    }
+  };
+
+  checkTicker = (tickerName) => {
+    if (this.context.tickers.find((t) => t.name === tickerName)) {
+      this.setState({
+        tickerOver: true,
+      });
+      return false;
+    }
+    if (!this.state.coins.find((t) => t === tickerName)) {
+      this.setState({
+        tickerNotExists: true,
+      });
+      return false;
+    }
+    return true;
+  };
+
   updateInputValue = (value) => {
     this.setState({
       inputValue: value,
+      tickerOver: false,
+      tickerNotExists: false,
     });
   };
 
   render() {
     const { isLoading } = this.state;
+    const errorMessage = this.state.tickerNotExists
+      ? "Такого тикера не существует"
+      : "Такой тикер уже добавлен";
+
     return (
       <>
         <label className="text-gray-600 font-medium text-sm  relative pb-2">
           Добавить тикер
           {!isLoading ? (
-            <div className="flex shadow-md">
-              <Input
-                coins={this.state.coins}
-                updateValue={this.updateInputValue}
-                inputValue={this.state.inputValue}
-              />
-              <ButtonAdd />
+            <div>
+              <div className="flex shadow-md">
+                <Input
+                  addTicker={this.addTicker}
+                  coins={this.state.coins}
+                  updateValue={this.updateInputValue}
+                  inputValue={this.state.inputValue}
+                />
+                <ButtonAdd addTicker={this.addTicker} />
+              </div>
+              {(this.state.tickerNotExists || this.state.tickerOver) && (
+                <div className="text-sm text-red-600">{errorMessage}</div>
+              )}
             </div>
           ) : (
-            <LoadRing />
+            <LoadingIcon />
           )}
         </label>
       </>
     );
   }
 }
-
-function LoadRing(props) {
-  return (
-    <div className="opacity-80 lds-dual-ring w-60 flex justify-center items-center py-1 bg-blue-200 border-blue-200 rounded-md border"></div>
-  );
-}
+InputTicker.contextType = TickersContext;
 
 function Input(props) {
   const [hiddenSuggestion, hideSuggestion] = useState(false);
@@ -72,7 +113,6 @@ function Input(props) {
     props.updateValue(value);
     hideSuggestion(true);
   };
-
   const handleOnBlur = (e) => {
     if (e.relatedTarget === null) {
       hideSuggestion(true);
@@ -86,6 +126,9 @@ function Input(props) {
   return (
     <div>
       <input
+        onKeyDown={(e) => {
+          if (e.key === "Enter") return props.addTicker();
+        }}
         onFocus={handleOnFocus}
         onBlur={handleOnBlur}
         onChange={handleChange}
@@ -151,10 +194,7 @@ function SuggestionCell(props) {
     <div
       className="px-2 py-1 cursor-pointer text-base hover:bg-blue-100 text-gray-500"
       tabIndex={0}
-      onClick={(e) => {
-        props.handleClick(props.children);
-        e.preventDefault();
-      }}
+      onClick={() => props.handleClick(props.children)}
     >
       {props.children}
     </div>
@@ -163,7 +203,10 @@ function SuggestionCell(props) {
 
 function ButtonAdd(props) {
   return (
-    <button className="rounded-r-md bg-blue-500 hover:bg-blue-600 text-white focus:outline-none px-2">
+    <button
+      onClick={props.addTicker}
+      className="rounded-r-md bg-blue-500 hover:bg-blue-600 text-white focus:outline-none px-2"
+    >
       Добавить
     </button>
   );
