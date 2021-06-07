@@ -29,12 +29,9 @@ export default class InputTicker extends Component {
 
   addTicker = () => {
     if (this.state.inputValue) {
-      const currentTicker = {
-        name: this.state.inputValue.toUpperCase(),
-        price: "-",
-      };
-      if (this.checkTicker(currentTicker.name)) {
-        this.context.addTicker(currentTicker);
+      const currentTickerName = this.state.inputValue.toUpperCase();
+      if (this.checkTicker(currentTickerName)) {
+        this.context.addTicker(currentTickerName);
         this.setState({
           inputValue: "",
         });
@@ -152,7 +149,7 @@ function Input(props) {
         <Suggestion
           inputValue={props.inputValue}
           coins={props.coins}
-          handleClick={handleSuggestionClick}
+          handleClick={props.addTicker}
         />
       )}
     </div>
@@ -183,7 +180,7 @@ function Suggestion(props) {
   ));
 
   return (
-    <div className="absolute top-full -my-1 w-44 left-0 bg-white py-1 shadow-xl rounded-md ">
+    <div className="z-10 absolute top-full -my-1 w-44 left-0 bg-white py-1 shadow-xl rounded-md ">
       {suggestionList}
     </div>
   );

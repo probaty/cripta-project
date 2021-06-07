@@ -1,23 +1,32 @@
 import React, { useContext } from "react";
 import { TickersContext } from "./TickersContext";
 import LoadingIcon from "./LoadingIcon/LoadingIcon";
+import "./TickersSection.css";
 
 export default function TickersSection() {
   const { tickers } = useContext(TickersContext);
+  const tickerList =
+    tickers && tickers.length
+      ? tickers.map((ticker) => (
+          <TickerCard key={ticker.name} ticker={ticker} />
+        ))
+      : null;
 
-  return (
+  return tickers.length ? (
     <main>
       <h2 className="text-4xl font-mono uppercase text-gray-500 text-center mb-5">
         Список тикеров
       </h2>
       <div className="container p-4 bg-white rounded-lg shadow-xl grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <TickerCard />
+        {tickerList}
       </div>
     </main>
-  );
+  ) : null;
 }
 
 function TickerCard(props) {
+  const { name, price } = props.ticker;
+  const { removeTicker } = useContext(TickersContext);
   const loading = (
     <LoadingIcon
       background="transparent"
@@ -27,9 +36,9 @@ function TickerCard(props) {
       height="5rem"
     />
   );
-  const price = (
+  const priceField = (
     <div className="h-20 mt-1 text-4xl font-semibold text-gray-700 flex justify-center items-center">
-      <span>2000</span>
+      <span>{price}</span>
     </div>
   );
   return (
@@ -38,41 +47,34 @@ function TickerCard(props) {
         overflow-hidden
         rounded-lg
         border-blue-100 border-2 border-solid
-        cursor-pointer"
+        cursor-pointer
+        flex
+        flex-col
+        justify-between
+        ticker-card
+        "
     >
       <div className="px-4 py-5 sm:p-6 text-center">
         <div className=" font-medium text-gray-500 truncate uppercase">
-          ??? - USD
+          {name} - USD
         </div>
 
-        <div className="flex justify-center items-center py-4">{price}</div>
+        <div className="flex justify-center items-center py-4">
+          {price ? priceField : loading}
+        </div>
       </div>
-      <TickerButton />
+      <TickerButton
+        deleteTicker={() => {
+          removeTicker(name);
+        }}
+      />
     </div>
   );
 }
 
 function TickerButton(props) {
   return (
-    <button
-      className="
-          flex
-          items-center
-          justify-center
-          font-medium
-          w-full
-          bg-blue-100
-          px-4
-          py-4
-          sm:px-6
-          text-md 
-          text-gray-600
-          hover:text-gray-800
-          hover:bg-blue-200
-          transition-all
-          focus:outline-none
-        "
-    >
+    <button className="delete-btn" onClick={props.deleteTicker}>
       <svg
         className="h-5 w-5 fill-current"
         xmlns="http://www.w3.org/2000/svg"
