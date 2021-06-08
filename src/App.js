@@ -1,5 +1,5 @@
 import "./App.css";
-import InputTicker from "./components/InputTicker";
+import InputTicker from "./components/InputTicker/InputTicker";
 import TickersSection from "./components/TickersSection";
 
 function App() {

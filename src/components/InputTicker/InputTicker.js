@@ -1,7 +1,8 @@
-import { fetchCoinList } from "../api";
-import React, { Component, useState } from "react";
-import { TickersContext } from "./TickersContext";
-import LoadingIcon from "./LoadingIcon/LoadingIcon";
+import { fetchCoinList } from "../../api";
+import React, { Component } from "react";
+import { TickersContext } from "../TickersContext";
+import LoadingIcon from "../LoadingIcon/LoadingIcon";
+import Input from "./Input";
 
 export default class InputTicker extends Component {
   constructor(props) {
@@ -109,102 +110,6 @@ export default class InputTicker extends Component {
   }
 }
 InputTicker.contextType = TickersContext;
-
-function Input(props) {
-  const [hiddenSuggestion, hideSuggestion] = useState(false);
-
-  const handleChange = (event) => {
-    props.updateValue(event.target.value);
-    hideSuggestion(false);
-  };
-
-  const handleOnBlur = (e) => {
-    if (e.relatedTarget === null) {
-      hideSuggestion(true);
-    }
-  };
-
-  const handleOnFocus = () => {
-    hideSuggestion(false);
-  };
-
-  return (
-    <div>
-      <input
-        onKeyDown={(e) => {
-          if (e.key === "Enter") return props.addTicker();
-        }}
-        onFocus={handleOnFocus}
-        onBlur={handleOnBlur}
-        onChange={handleChange}
-        value={props.inputValue}
-        type="text"
-        className="block
-              w-44
-              border-2
-              border-transparent
-              text-gray-900
-              focus:outline-none
-              focus:ring-1
-              focus:border-2
-              focus:ring-blue-300
-              focus:border-blue-300
-              sm:text-sm
-              rounded-l-md "
-      />
-
-      {!hiddenSuggestion && (
-        <Suggestion
-          inputValue={props.inputValue}
-          coins={props.coins}
-          handleClick={props.handleClickAddTicker}
-        />
-      )}
-    </div>
-  );
-}
-
-function Suggestion(props) {
-  function autoSuggestions() {
-    const inputValue = props.inputValue.trim().toLowerCase();
-    const inputLength = inputValue.length;
-    const coins = props.coins;
-
-    return inputLength === 0
-      ? []
-      : coins
-          .filter(
-            (coin) => coin.toLowerCase().slice(0, inputLength) === inputValue
-          )
-          .slice(0, 7);
-  }
-
-  if (autoSuggestions().length <= 1) return null;
-
-  const suggestionList = autoSuggestions().map((s) => (
-    <SuggestionCell key={s} handleClick={() => props.handleClick(s)}>
-      {s}
-    </SuggestionCell>
-  ));
-
-  return (
-    <div className="z-10 absolute top-full -my-1 w-44 left-0 bg-white py-1 shadow-xl rounded-md ">
-      {suggestionList}
-    </div>
-  );
-}
-
-function SuggestionCell(props) {
-  return (
-    <div
-      className="px-2 py-1 cursor-pointer text-base hover:bg-blue-100 text-gray-500"
-      tabIndex={0}
-      onClick={() => props.handleClick(props.children)}
-    >
-      {props.children}
-    </div>
-  );
-}
 
 function ButtonAdd(props) {
   return (

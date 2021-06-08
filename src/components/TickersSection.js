@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { TickersContext } from "./TickersContext";
 import LoadingIcon from "./LoadingIcon/LoadingIcon";
 import "./TickersSection.css";
@@ -27,6 +27,7 @@ export default function TickersSection() {
 function TickerCard(props) {
   const { name, price } = props.ticker;
   const { removeTicker } = useContext(TickersContext);
+  const [cardHide, setCardHide] = useState(false);
   const loading = (
     <LoadingIcon
       background="transparent"
@@ -43,7 +44,7 @@ function TickerCard(props) {
   );
   return (
     <div
-      className="bg-blue-50
+      className={`bg-blue-50
         overflow-hidden
         rounded-lg
         border-blue-100 border-2 border-solid
@@ -52,7 +53,7 @@ function TickerCard(props) {
         flex-col
         justify-between
         ticker-card
-        "
+         ${cardHide ? "hide-ticker" : ""} `}
     >
       <div className="px-4 py-5 sm:p-6 text-center">
         <div className=" font-medium text-gray-500 truncate uppercase">
@@ -65,7 +66,8 @@ function TickerCard(props) {
       </div>
       <TickerButton
         deleteTicker={() => {
-          removeTicker(name);
+          setCardHide(true);
+          setTimeout(() => removeTicker(name), 500);
         }}
       />
     </div>
