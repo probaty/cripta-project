@@ -12,19 +12,25 @@ export default class InputTicker extends Component {
       isLoading: true,
       inputValue: "",
       tickerOver: false,
-      tickerNotExists: false,
     };
   }
 
   async componentDidMount() {
-    const coinsList = await fetchCoinList();
-
-    this.setState(() => {
-      return {
-        coins: coinsList,
-        isLoading: false,
-      };
-    });
+    try {
+      const coinsList = await fetchCoinList();
+      this.setState(() => {
+        return {
+          coins: coinsList,
+          isLoading: false,
+        };
+      });
+    } catch {
+      this.setState(() => {
+        return {
+          isLoading: false,
+        };
+      });
+    }
   }
 
   addTicker = () => {
@@ -39,16 +45,24 @@ export default class InputTicker extends Component {
     }
   };
 
+  handleClickAddTicker = (tickerName) => {
+    if (this.checkTicker(tickerName)) {
+      this.context.addTicker(tickerName.toUpperCase());
+      console.log(123);
+      this.setState({
+        inputValue: "",
+      });
+      return;
+    }
+    this.setState({
+      inputValue: tickerName,
+    });
+  };
+
   checkTicker = (tickerName) => {
     if (this.context.tickers.find((t) => t.name === tickerName)) {
       this.setState({
         tickerOver: true,
-      });
-      return false;
-    }
-    if (!this.state.coins.find((t) => t === tickerName)) {
-      this.setState({
-        tickerNotExists: true,
       });
       return false;
     }
@@ -59,15 +73,12 @@ export default class InputTicker extends Component {
     this.setState({
       inputValue: value,
       tickerOver: false,
-      tickerNotExists: false,
     });
   };
 
   render() {
     const { isLoading } = this.state;
-    const errorMessage = this.state.tickerNotExists
-      ? "Такого тикера не существует"
-      : "Такой тикер уже добавлен";
+    const errorMessage = this.state.tickerOver && "Такой тикер уже добавлен";
 
     return (
       <>
@@ -81,10 +92,11 @@ export default class InputTicker extends Component {
                   coins={this.state.coins}
                   updateValue={this.updateInputValue}
                   inputValue={this.state.inputValue}
+                  handleClickAddTicker={this.handleClickAddTicker}
                 />
                 <ButtonAdd addTicker={this.addTicker} />
               </div>
-              {(this.state.tickerNotExists || this.state.tickerOver) && (
+              {this.state.tickerOver && (
                 <div className="text-sm text-red-600">{errorMessage}</div>
               )}
             </div>
@@ -106,10 +118,6 @@ function Input(props) {
     hideSuggestion(false);
   };
 
-  const handleSuggestionClick = (value) => {
-    props.updateValue(value);
-    hideSuggestion(true);
-  };
   const handleOnBlur = (e) => {
     if (e.relatedTarget === null) {
       hideSuggestion(true);
@@ -149,7 +157,7 @@ function Input(props) {
         <Suggestion
           inputValue={props.inputValue}
           coins={props.coins}
-          handleClick={props.addTicker}
+          handleClick={props.handleClickAddTicker}
         />
       )}
     </div>
@@ -174,7 +182,7 @@ function Suggestion(props) {
   if (autoSuggestions().length <= 1) return null;
 
   const suggestionList = autoSuggestions().map((s) => (
-    <SuggestionCell key={s} handleClick={props.handleClick}>
+    <SuggestionCell key={s} handleClick={() => props.handleClick(s)}>
       {s}
     </SuggestionCell>
   ));

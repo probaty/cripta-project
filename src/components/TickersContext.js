@@ -17,7 +17,6 @@ export class TickersProvider extends Component {
       name: tickerName,
       price: null,
     };
-    console.log(currentTicker);
     this.setState((state, props) => {
       return {
         tickers: [...state.tickers, currentTicker],
@@ -38,13 +37,11 @@ export class TickersProvider extends Component {
   };
 
   updateTicker = (tickerName, newPrice) => {
-    console.log(this.state.tickers);
     if (this.state.tickers && this.state.tickers.length !== 0)
       this.setState((state, props) => {
         return {
           tickers: state.tickers.map((t) => {
             if (t.name === tickerName) {
-              console.log(t);
               return { ...t, price: newPrice };
             }
             return t;
