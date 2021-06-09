@@ -1,26 +1,63 @@
-import React, { useContext, useState } from "react";
-import { TickersContext } from "./TickersContext";
-import LoadingIcon from "./LoadingIcon/LoadingIcon";
+import React, { useContext, useState, useEffect } from "react";
+import { TickersContext } from "../TickersContext";
+import LoadingIcon from "../LoadingIcon/LoadingIcon";
 import "./TickersSection.css";
+import Pagination from "./Pagination";
 
 export default function TickersSection() {
   const { tickers } = useContext(TickersContext);
+  const [page, setPage] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(false);
+
+  const startIndex = (page - 1) * 6;
+  const endIndex = page * 6;
+  const filteredList = tickers.slice(startIndex, endIndex);
+
+  useEffect(() => {
+    if (tickers.length > endIndex) {
+      setHasNextPage(true);
+    } else {
+      setHasNextPage(false);
+    }
+  }, [tickers, endIndex]);
+
+  const nextPage = () => {
+    if (hasNextPage) {
+      setPage(page + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (page !== 1) {
+      setPage(page - 1);
+    }
+  };
   const tickerList =
     tickers && tickers.length
-      ? tickers.map((ticker) => (
+      ? filteredList.map((ticker) => (
           <TickerCard key={ticker.name} ticker={ticker} />
         ))
       : null;
 
   return tickers.length ? (
-    <main>
+    <>
       <h2 className="text-4xl font-mono uppercase text-gray-500 text-center mb-5">
         Список тикеров
       </h2>
-      <div className="container p-4 bg-white rounded-lg shadow-xl grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {tickerList}
+      <div className="container p-4 bg-white rounded-lg shadow-xl ">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {tickerList}
+        </div>
+        <div className="flex justify-center items-center mt-2">
+          <Pagination
+            page={page}
+            hasNextPage={hasNextPage}
+            nextPage={nextPage}
+            prevPage={prevPage}
+          />
+        </div>
       </div>
-    </main>
+    </>
   ) : null;
 }
 

@@ -49,7 +49,6 @@ export default class InputTicker extends Component {
   handleClickAddTicker = (tickerName) => {
     if (this.checkTicker(tickerName)) {
       this.context.addTicker(tickerName.toUpperCase());
-      console.log(123);
       this.setState({
         inputValue: "",
       });
