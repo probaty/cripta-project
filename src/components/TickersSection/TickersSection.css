@@ -5,12 +5,12 @@
 }
 .ticker-card {
   animation: ticker-show;
-  animation-duration: 0.5s;
+  animation-duration: 0.3s;
   animation-fill-mode: forwards;
 }
 .hide-ticker {
   animation: ticker-hide;
-  animation-duration: 0.5s;
+  animation-duration: 0.3s;
   animation-fill-mode: forwards;
 }
 

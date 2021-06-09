@@ -12,6 +12,22 @@ export class TickersProvider extends Component {
     };
   }
 
+  componentDidUpdate = () => {
+    this.saveToLC();
+  };
+
+  componentDidMount = () => {
+    const tickersFromLC = JSON.parse(localStorage.getItem("tickers"));
+    if (tickersFromLC !== null && tickersFromLC.length) {
+      this.setState({
+        tickers: tickersFromLC,
+      });
+      tickersFromLC.forEach((ticker) =>
+        subscribeTicker(ticker.name, this.updateTicker)
+      );
+    }
+  };
+
   addTicker = (tickerName) => {
     const currentTicker = {
       name: tickerName,
@@ -48,6 +64,10 @@ export class TickersProvider extends Component {
           }),
         };
       });
+  };
+
+  saveToLC = () => {
+    localStorage.setItem("tickers", JSON.stringify(this.state.tickers));
   };
 
   render() {
