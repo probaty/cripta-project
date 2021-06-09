@@ -1,6 +1,6 @@
 @layer components {
   .delete-btn {
-    @apply flex items-center justify-center font-medium w-full bg-blue-100 px-4 py-4 sm:px-6 text-base text-gray-600 hover:text-gray-800 hover:bg-blue-200 transition-all focus:outline-none;
+    @apply flex items-center justify-center font-medium w-full bg-blue-100 px-4 py-4 sm:px-6 text-base text-gray-600 hover:text-gray-800 hover:bg-blue-200 active:bg-blue-300 active:text-gray-800 transition-all focus:outline-none;
   }
 }
 .ticker-card {
@@ -12,6 +12,9 @@
   animation: ticker-hide;
   animation-duration: 0.3s;
   animation-fill-mode: forwards;
+}
+.delete-btn:focus-within {
+  outline: none;
 }
 
 @keyframes ticker-show {

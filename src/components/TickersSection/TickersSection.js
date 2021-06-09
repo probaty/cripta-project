@@ -5,7 +5,7 @@ import "./TickersSection.css";
 import Pagination from "./Pagination";
 
 export default function TickersSection() {
-  const { tickers } = useContext(TickersContext);
+  const { tickers, selectTicker, selectedTicker } = useContext(TickersContext);
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
 
@@ -32,11 +32,24 @@ export default function TickersSection() {
       setPage(page - 1);
     }
   };
+
+  const handleSelect = (tickerName) => {
+    selectTicker(tickerName);
+  };
+
   const tickerList =
     tickers && tickers.length
-      ? filteredList.map((ticker) => (
-          <TickerCard key={ticker.name} ticker={ticker} />
-        ))
+      ? filteredList.map((ticker) => {
+          const selected = ticker.name === selectedTicker;
+          return (
+            <TickerCard
+              key={ticker.name}
+              selected={selected}
+              ticker={ticker}
+              handleSelect={() => handleSelect(ticker.name)}
+            />
+          );
+        })
       : null;
 
   return tickers.length ? (
@@ -81,6 +94,7 @@ function TickerCard(props) {
   );
   return (
     <div
+      onClick={props.handleSelect}
       className={`bg-blue-50
         overflow-hidden
         rounded-lg
@@ -90,7 +104,9 @@ function TickerCard(props) {
         flex-col
         justify-between
         ticker-card
-         ${cardHide ? "hide-ticker" : ""} `}
+         ${cardHide ? "hide-ticker" : ""}
+         ${props.selected ? "border-blue-400" : ""}
+         `}
     >
       <div className="px-4 py-5 sm:p-6 text-center">
         <div className=" font-medium text-gray-500 truncate uppercase">
@@ -115,7 +131,7 @@ function TickerButton(props) {
   return (
     <button className="delete-btn" onClick={props.deleteTicker}>
       <svg
-        className="h-5 w-5 fill-current"
+        className="h-5 w-5 fill-current "
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 20 20"
         aria-hidden="true"

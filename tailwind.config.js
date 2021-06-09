@@ -5,7 +5,12 @@ module.exports = {
     extend: {},
   },
   variants: {
-    extend: { borderWidth: ["last"], fill: ["hover", "focus"] },
+    extend: {
+      borderWidth: ["last"],
+      fill: ["hover", "focus"],
+      backgroundColor: ["active"],
+      textColor: ["active"],
+    },
   },
   plugins: [require("@tailwindcss/forms")],
 };
