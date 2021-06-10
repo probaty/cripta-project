@@ -52,26 +52,21 @@ export default function TickersSection() {
         })
       : null;
 
-  return tickers.length ? (
+  return (
     <>
-      <h2 className="text-4xl font-mono uppercase text-gray-500 text-center mb-5">
-        Список тикеров
-      </h2>
-      <div className="container p-4 bg-white rounded-lg shadow-xl ">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {tickerList}
-        </div>
-        <div className="flex justify-center items-center mt-2">
-          <Pagination
-            page={page}
-            hasNextPage={hasNextPage}
-            nextPage={nextPage}
-            prevPage={prevPage}
-          />
-        </div>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {tickerList}
+      </div>
+      <div className="flex justify-center items-center mt-2">
+        <Pagination
+          page={page}
+          hasNextPage={hasNextPage}
+          nextPage={nextPage}
+          prevPage={prevPage}
+        />
       </div>
     </>
-  ) : null;
+  );
 }
 
 function TickerCard(props) {
@@ -129,7 +124,13 @@ function TickerCard(props) {
 
 function TickerButton(props) {
   return (
-    <button className="delete-btn" onClick={props.deleteTicker}>
+    <button
+      className="delete-btn"
+      onClick={(e) => {
+        e.stopPropagation();
+        props.deleteTicker();
+      }}
+    >
       <svg
         className="h-5 w-5 fill-current "
         xmlns="http://www.w3.org/2000/svg"

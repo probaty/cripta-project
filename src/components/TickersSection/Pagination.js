@@ -5,7 +5,7 @@ export default function PaginationSection(props) {
     <div className="flex">
       <button
         onClick={props.prevPage}
-        className="text-gray-500 bg-blue-50 border-blue-100 border-2 border-solid rounded-l-lg py-1 px-2 focus:outline-none focus:border-blue-300"
+        className="text-gray-500 bg-blue-50 border-blue-100 border-2 border-solid rounded-l-lg py-1 px-2 focus:outline-none active:bg-blue-100"
       >
         <svg
           className="h-5 w-5 fill-current"
@@ -27,7 +27,7 @@ export default function PaginationSection(props) {
       </div>
       <button
         onClick={props.nextPage}
-        className="text-gray-500 bg-blue-50 border-blue-100 border-2 border-solid rounded-r-lg py-1 px-2 focus:outline-none focus:border-blue-300"
+        className="text-gray-500 bg-blue-50 border-blue-100 border-2 border-solid rounded-r-lg py-1 px-2 focus:outline-none active:bg-blue-100"
       >
         <svg
           className="h-5 w-5 fill-current transform rotate-180"

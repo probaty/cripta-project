@@ -1,8 +1,12 @@
 import "./App.css";
 import InputTicker from "./components/InputTicker/InputTicker";
 import TickersSection from "./components/TickersSection/TickersSection";
+import Chart from "./components/Chart/Chart";
+import { TickersContext } from "./components/TickersContext";
+import { useContext } from "react";
 
 function App() {
+  const { tickers } = useContext(TickersContext);
   return (
     <div className="App m-0 bg-blue-50">
       <div className="container mx-auto p-2 md:p-6">
@@ -13,7 +17,19 @@ function App() {
           </div>
         </header>
         <main>
-          <TickersSection />
+          <h2 className="text-4xl font-mono uppercase text-gray-500 text-center mb-5">
+            Список тикеров
+          </h2>
+          {tickers.length ? (
+            <div className="container p-4 bg-white rounded-lg shadow-xl ">
+              <TickersSection />
+              <Chart />
+            </div>
+          ) : (
+            <h4 className="text-xl font-mono text-gray-500 text-center mb-5">
+              Добавьте тикер, чтобы показать список
+            </h4>
+          )}
         </main>
       </div>
     </div>
