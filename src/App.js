@@ -9,7 +9,7 @@ function App() {
   const { tickers } = useContext(TickersContext);
   return (
     <div className="App m-0 bg-blue-50">
-      <div className="container mx-auto p-2 md:p-6">
+      <div className="container mx-auto p-0 md:p-6">
         <header className="flex flex-col-reverse lg:flex-row lg:items-end items-center justify-between py-20">
           <InputTicker />
           <div className="font-mono text-6xl text-center pb-8 lg:pb-0 uppercase text-gray-600 flex-shrink-0">
@@ -21,7 +21,7 @@ function App() {
             Список тикеров
           </h2>
           {tickers.length ? (
-            <div className="container p-4 bg-white rounded-lg shadow-xl ">
+            <div className="container p-2 md:p-4 bg-white rounded-lg md:shadow-xl ">
               <TickersSection />
               <Chart />
             </div>

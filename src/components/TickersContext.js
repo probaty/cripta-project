@@ -51,9 +51,7 @@ export class TickersProvider extends Component {
       };
     });
     if (this.state.selectedTicker === tickerName) {
-      this.setState({
-        selectedTicker: null,
-      });
+      this.clearSelection();
     }
 
     unsubscribeTicker(tickerName);
@@ -96,8 +94,12 @@ export class TickersProvider extends Component {
   selectTicker = (tickerName) => {
     if (this.state.selectedTicker === tickerName) return;
     this.setState({
-      chart: [],
       selectedTicker: tickerName,
+    });
+  };
+  clearSelection = () => {
+    this.setState({
+      selectedTicker: null,
     });
   };
 
@@ -108,6 +110,7 @@ export class TickersProvider extends Component {
     const addTicker = this.addTicker;
     const removeTicker = this.removeTicker;
     const selectTicker = this.selectTicker;
+    const clearSelection = this.clearSelection;
     return (
       <TickersContext.Provider
         value={{
@@ -117,6 +120,7 @@ export class TickersProvider extends Component {
           selectTicker,
           selectedTicker,
           chart,
+          clearSelection,
         }}
       >
         {this.props.children}
