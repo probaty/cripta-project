@@ -62,7 +62,7 @@ export default function Chart() {
           </button>
         )}
       </h2>
-      {selectedTicker ? (
+      {selectedTicker && chartData.length ? (
         <ResponsiveContainer width="100%" height={400}>
           <ComposedChart
             data={chartData}

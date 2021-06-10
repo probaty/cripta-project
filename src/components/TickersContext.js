@@ -106,7 +106,6 @@ export class TickersProvider extends Component {
   render() {
     const tickers = this.state.tickers;
     const selectedTicker = this.state.selectedTicker;
-    const chart = this.state.chart;
     const addTicker = this.addTicker;
     const removeTicker = this.removeTicker;
     const selectTicker = this.selectTicker;
@@ -119,7 +118,6 @@ export class TickersProvider extends Component {
           removeTicker,
           selectTicker,
           selectedTicker,
-          chart,
           clearSelection,
         }}
       >
