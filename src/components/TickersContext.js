@@ -34,6 +34,7 @@ export class TickersProvider extends Component {
       name: tickerName,
       price: null,
       chart: [],
+      error: false,
     };
     this.setState((state, props) => {
       return {
@@ -53,11 +54,10 @@ export class TickersProvider extends Component {
         tickers: state.tickers.filter((t) => t.name !== tickerName),
       };
     });
-
     unsubscribeTicker(tickerName);
   };
 
-  updateTicker = (tickerName, newPrice) => {
+  updateTicker = (tickerName, newPrice, error = false) => {
     if (this.state.tickers && this.state.tickers.length !== 0) {
       const dateNow = new Date().toTimeString().split(" ")[0].split(":");
       const dateFormatted = [dateNow[1], dateNow[2]].join(":");
@@ -72,7 +72,12 @@ export class TickersProvider extends Component {
               t.chart.shift();
             }
             if (t.name === tickerName) {
-              return { ...t, price: newPrice, chart: [...t.chart, chartData] };
+              return {
+                ...t,
+                error: error,
+                price: newPrice,
+                chart: [...t.chart, chartData],
+              };
             }
             return t;
           }),
@@ -92,6 +97,10 @@ export class TickersProvider extends Component {
   };
 
   selectTicker = (tickerName) => {
+    const selectedTicker = this.state.tickers.find(
+      (t) => t.name === tickerName
+    );
+    if (selectedTicker.error) return;
     if (this.state.selectedTicker === tickerName) return;
     this.setState({
       selectedTicker: tickerName,

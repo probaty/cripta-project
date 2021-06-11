@@ -2,8 +2,20 @@
   .delete-btn {
     @apply flex items-center justify-center font-medium w-full bg-blue-100 px-4 py-4 sm:px-6 text-base text-gray-600 hover:text-gray-800 hover:bg-blue-200 active:bg-blue-300 active:text-gray-800 transition-all focus:outline-none;
   }
+  .delete-btn-error {
+    @apply bg-red-200 hover:bg-red-300 active:bg-red-300;
+  }
+  .ticker-card {
+    @apply overflow-hidden rounded-lg  border-2 border-solid cursor-pointer flex flex-col justify-between;
+  }
+  .ticker-default {
+    @apply bg-blue-50 border-blue-100;
+  }
+  .ticker-error {
+    @apply bg-red-100 border-red-200;
+  }
 }
-.ticker-card {
+.ticker-animated {
   animation: ticker-show;
   animation-duration: 0.3s;
   animation-fill-mode: forwards;

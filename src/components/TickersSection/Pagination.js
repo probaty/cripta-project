@@ -2,7 +2,7 @@ import React from "react";
 
 export default function PaginationSection(props) {
   return (
-    <div className="flex">
+    <div className="flex mt-3">
       <button
         onClick={props.prevPage}
         className="text-gray-500 bg-blue-50 border-blue-100 border-2 border-solid rounded-l-lg py-1 px-2 focus:outline-none active:bg-blue-100"

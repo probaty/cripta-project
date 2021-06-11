@@ -46,6 +46,7 @@ export default function TickersSection() {
               key={ticker.name}
               selected={selected}
               ticker={ticker}
+              error={ticker.error}
               handleSelect={() => handleSelect(ticker.name)}
             />
           );
@@ -70,7 +71,7 @@ export default function TickersSection() {
 }
 
 function TickerCard(props) {
-  const { name, price } = props.ticker;
+  const { name, price, error } = props.ticker;
   const { removeTicker } = useContext(TickersContext);
   const [cardHide, setCardHide] = useState(false);
   const loading = (
@@ -82,26 +83,33 @@ function TickerCard(props) {
       height="5rem"
     />
   );
+  const errorMessage = (
+    <span>
+      <span className="text-2xl">Ошибка!</span>
+      <br /> Данная монета не поддерживается биржей
+    </span>
+  );
+  const priceMessage = <span>{price}</span>;
   const priceField = (
-    <div className="h-20 mt-1 text-4xl font-semibold text-gray-600 flex justify-center items-center">
-      <span>{price}</span>
+    <div
+      className={`h-20 mt-1  font-semibold text-gray-600 flex justify-center items-center ${
+        error ? "text-lg" : "text-4xl"
+      }`}
+    >
+      <span>{error ? errorMessage : priceMessage}</span>
     </div>
   );
+
   return (
     <div
-      onClick={!cardHide ? props.handleSelect : console.log("jopa")}
-      className={`bg-blue-50
-        overflow-hidden
-        rounded-lg
-        border-blue-100 border-2 border-solid
-        cursor-pointer
-        flex
-        flex-col
-        justify-between
+      onClick={!cardHide ? props.handleSelect : null}
+      className={`
+        ${cardHide ? "hide-ticker" : ""}
+        ${error ? "ticker-error" : "ticker-default"}
+        ticker-animated
         ticker-card
-         ${cardHide ? "hide-ticker" : ""}
-         ${props.selected ? "border-blue-400" : ""}
          `}
+      style={{ borderColor: props.selected ? "#60A5FA" : "" }}
     >
       <div className="px-4 py-5 sm:p-6 text-center">
         <div className=" font-medium text-gray-500 truncate uppercase">
@@ -109,10 +117,11 @@ function TickerCard(props) {
         </div>
 
         <div className="flex justify-center items-center py-4">
-          {price ? priceField : loading}
+          {price || error ? priceField : loading}
         </div>
       </div>
       <TickerButton
+        error={error}
         deleteTicker={() => {
           setCardHide(true);
           setTimeout(() => removeTicker(name), 500);
@@ -125,7 +134,7 @@ function TickerCard(props) {
 function TickerButton(props) {
   return (
     <button
-      className="delete-btn"
+      className={`delete-btn ${props.error ? "delete-btn-error" : ""}`}
       onClick={(e) => {
         e.stopPropagation();
         props.deleteTicker();
