@@ -83,13 +83,13 @@ function TickerCard(props) {
     />
   );
   const priceField = (
-    <div className="h-20 mt-1 text-4xl font-semibold text-gray-700 flex justify-center items-center">
+    <div className="h-20 mt-1 text-4xl font-semibold text-gray-600 flex justify-center items-center">
       <span>{price}</span>
     </div>
   );
   return (
     <div
-      onClick={props.handleSelect}
+      onClick={!cardHide ? props.handleSelect : console.log("jopa")}
       className={`bg-blue-50
         overflow-hidden
         rounded-lg

@@ -45,14 +45,14 @@ export class TickersProvider extends Component {
   };
 
   removeTicker = (tickerName) => {
+    if (this.state.selectedTicker === tickerName) {
+      this.clearSelection();
+    }
     this.setState((state, props) => {
       return {
         tickers: state.tickers.filter((t) => t.name !== tickerName),
       };
     });
-    if (this.state.selectedTicker === tickerName) {
-      this.clearSelection();
-    }
 
     unsubscribeTicker(tickerName);
   };

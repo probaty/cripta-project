@@ -23,9 +23,9 @@ export default function Chart() {
       <hr className="w-full text-gray-500 mt-5" />
       <h2 className="text-4xl font-mono uppercase text-gray-500 text-center my-5 relative">
         график
-        {selectedTicker && (
+        {selectedTicker && chartData.length && chartData && (
           <button
-            className="h-8 w-8  absolute right-2 md:right-6 top-1/2 transform -translate-y-1/2 focus:outline-none text-gray-500 active:text-gray-700"
+            className="h-8 w-8  absolute right-2 md:right-6 top-1/2 transform -translate-y-1/2 focus:outline-none text-gray-400 hover:text-gray-500 active:text-gray-700"
             onClick={clearSelection}
           >
             <svg
@@ -62,8 +62,8 @@ export default function Chart() {
           </button>
         )}
       </h2>
-      {selectedTicker && chartData.length ? (
-        <ResponsiveContainer width="100%" height={400}>
+      {selectedTicker && chartData.length && chartData !== undefined ? (
+        <ResponsiveContainer width="100%" height={330}>
           <ComposedChart
             data={chartData}
             margin={
@@ -77,10 +77,12 @@ export default function Chart() {
             <CartesianGrid opacity={0.7} vertical={false} />
             <Bar dataKey="price" isAnimationActive={false} fill="#BFDBFE" />
             <Line
-              type="monotone"
+              type="basis"
               dataKey="price"
               isAnimationActive={false}
               stroke="#60A5FA"
+              dot={false}
+              strokeWidth={2}
             />
             <XAxis dataKey="date" stroke="#111827" />
             <YAxis
@@ -111,9 +113,9 @@ function CustomTooltip({ active, payload, label }) {
   if (active) {
     const number = payload[0].value;
     return (
-      <div className="bg-white px-3 py-2 rounded-md shadow-md">
-        <h4>{label}</h4>
-        <p>USD: {number}</p>
+      <div className="bg-white px-3 py-2 rounded-md shadow-md border-blue-100 border-2">
+        <h4 className="font-semibold text-gray-600">{label}</h4>
+        <p className="text-gray-600 font-mono text-lg">${number}</p>
       </div>
     );
   }
