@@ -110,7 +110,7 @@ export default function Chart() {
   );
 }
 function CustomTooltip({ active, payload, label }) {
-  if (active) {
+  if (active && payload && label) {
     const number = payload[0].value;
     return (
       <div className="bg-white px-3 py-2 rounded-md shadow-md border-blue-100 border-2">
